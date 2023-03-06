@@ -6,6 +6,11 @@ set shiftwidth=4
 set autoindent
 colorscheme slate
 
+" Starts a VIM Server
+if empty(v:servername) && exists('*remote_startserver')
+	call remote_startserver('VIM')
+endif
+
 " Vimplug Automatic Download
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
@@ -16,11 +21,13 @@ endif
 "Vim Plugins
 call plug#begin()
 Plug 'lervag/vimtex' " VIMTeX plugin
+Plug 'preservim/nerdtree' "Nerdtree plugin
 call plug#end()
 
-" VimTeX Configuration
-filetype plugin indent on
-syntax enable
-let g:vimtex_view_general_viewer = 'sumatraPDF'
-let g:vimtex_view_general_options = '-reuse-instance @pdf'
-let g:vimtex_view_general_options_latexmk = '-reuse-instance'
+" VimTeX Config
+let g:vimtex_view_general_viewer = '/home/asingh/.local/bin/sumatrapdf.sh'
+let g:vimtex_view_general_options = '-reuse-instance -forward-search @tex @line @pdf'
+
+" NERDTree Config
+autocmd VimEnter * NERDTree
+let NERDTreeShowHidden=1
