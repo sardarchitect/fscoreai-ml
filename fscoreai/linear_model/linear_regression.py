@@ -1,6 +1,6 @@
 import numpy as np
 
-class SimpleLinearRegression():
+class LinearRegression():
     """Linear Regression through Ordinary Least Squares (OLS).
     Linear Regression fits a linear hyperplane with coefficients
     (coef_) and an intercept (intercept_). It minimizes the cost by minimizing
@@ -21,7 +21,7 @@ class SimpleLinearRegression():
     def __init__(self):
         self.coef_ = 0
         self.intercept_ = 0
-        print("OLS Model Initialized")
+        print("Linear Regression Model Initialized")
 
     def fit(self, X, y, fit_type = 'stat', lr=1e-8, epochs=50):
         """"
