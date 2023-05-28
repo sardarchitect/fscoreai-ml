@@ -1,62 +1,33 @@
 from fscoreai.primitives import dynamic_array
+from fscoreai.primitives import dynamic_set
 
-def print_arr(arr):
-    for i in range(len(arr)):
-        print(arr[i])
+arr = dynamic_set.Dynamic_Set()
 
-arr = dynamic_array.Dynamic_Array()
+# Append
+arr.append(0)
+arr.print()
 
-##
-arr.append(1)
-print(f"Len/Cap: {len(arr)} / {arr.capacity}")
-print_arr(arr)
-arr.append(2)
-print(f"Len/Cap: {len(arr)} / {arr.capacity}")
-print_arr(arr)
-arr.append(3)
-print(f"Len/Cap: {len(arr)} / {arr.capacity}")
-print_arr(arr)
+arr.append(0)
+arr.print()
 
-## 
-arr.insert(3, 4)
-print(f"Len/Cap: {len(arr)} / {arr.capacity}")
-print_arr(arr)
-arr.insert(4, 5)
-print(f"Len/Cap: {len(arr)} / {arr.capacity}")
-print_arr(arr)
-arr.insert(5, 6)
-print(f"Len/Cap: {len(arr)} / {arr.capacity}")
-print_arr(arr)
+# Insert
+arr.insert(0, 1)
+arr.print()
 
-## 
-arr.insert(0, -1)
-print(f"Len/Cap: {len(arr)} / {arr.capacity}")
-print_arr(arr)
-arr.insert(0, -2)
-print(f"Len/Cap: {len(arr)} / {arr.capacity}")
-print_arr(arr)
-arr.insert(0, -3)
-print(f"Len/Cap: {len(arr)} / {arr.capacity}")
-print_arr(arr)
+arr.insert(2, 2)
+arr.insert(3, 2)
 
-## 
+arr.print()
+
+# Pop
 arr.pop()
-print(f"Len/Cap: {len(arr)} / {arr.capacity}")
-print_arr(arr)
-arr.pop()
-print(f"Len/Cap: {len(arr)} / {arr.capacity}")
-print_arr(arr)
-arr.pop()
-print(f"Len/Cap: {len(arr)} / {arr.capacity}")
-print_arr(arr)
+arr.print()
+arr.append(0)
+arr.print()
 
-## 
+# Delete
 arr.delete(0)
-print(f"Len/Cap: {len(arr)} / {arr.capacity}")
-print_arr(arr)
-arr.delete(0)
-print(f"Len/Cap: {len(arr)} / {arr.capacity}")
-print_arr(arr)
-arr.delete(0)
-print(f"Len/Cap: {len(arr)} / {arr.capacity}")
-print_arr(arr)
+arr.print()
+
+arr.pop()
+arr.print()
