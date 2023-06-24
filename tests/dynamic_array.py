@@ -3,7 +3,7 @@ import sys
 import pytest
 PROJECT_PATH = os.getcwd()
 sys.path.append(PROJECT_PATH)
-from src.primitives.dynamic_array import DynamicArray
+from src.primitives.array import DynamicArray
 
 @pytest.fixture
 def array():

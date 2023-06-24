@@ -3,7 +3,7 @@ import sys
 import pytest
 PROJECT_PATH = os.getcwd()
 sys.path.append(PROJECT_PATH)
-from src.primitives.set import Set
+from src.primitives.array import Set
 
 @pytest.fixture
 def set():
