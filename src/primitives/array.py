@@ -1,5 +1,4 @@
 import ctypes
-
 class ArrayBase():
     '''
     Base Array class
@@ -36,6 +35,64 @@ class ArrayBase():
             print(self.array[i], end=' ')
         print('\n')
 
+    def search_linear(self, value):
+        for i in range(self.length):
+            if self.array[i] == value:
+                return i
+        print("Value not found in array")
+        return
+    
+    def search_binary(self, value, sorted=False):
+        if not sorted:
+            self.sort_bubble()
+        
+        lower_bound = 0
+        upper_bound = self.length - 1
+
+        while lower_bound <= upper_bound:
+            midpoint = (upper_bound + lower_bound) // 2
+            value_at_midpoint = self.array[midpoint]
+            if value == value_at_midpoint:
+                return midpoint
+            
+            elif value < value_at_midpoint:
+                upper_bound = midpoint - 1
+            
+            elif value > value_at_midpoint:
+                lower_bound = midpoint + 1
+        
+
+    def sort_bubble(self):
+        upper_bound = self.length - 1
+        sorted = False
+
+        while not sorted:
+            sorted = True
+            for i in range(upper_bound):
+                if self.array[i] > self.array[i + 1]:
+                    self.array[i], self.array[i + 1] = self.array[i + 1], self.array[i]
+                    sorted = False
+            upper_bound -= 1
+            
+        return
+
+    def sort_selection(self):
+        for i in range(0, self.length - 1):
+            lowest_number_index = i
+            for j in range(i + 1, self.length):
+                if self.array[j] < self.array[lowest_number_index]:
+                    lowest_number_index = j
+            
+            if lowest_number_index != i:
+                temp = self.array[i]
+                self.array[i] = self.array[lowest_number_index]
+                self.array[lowest_number_index] = temp
+
+        return
+    
+    def sort_insertion(self):
+        pass
+    
 class DynamicArray(ArrayBase):
     '''
     Dynamic Array class
@@ -112,7 +169,6 @@ class Set(DynamicArray):
             raise ValueError("Item already exists in set")
         super().append(value)
 
-
 class OrderedArray(DynamicArray):
     '''
     Dyanmic Array Class
@@ -139,6 +195,8 @@ class OrderedArray(DynamicArray):
         for i in range(self.length):
             if self.array[i] == value:
                 index = i
-        
         if index:
             super().delete(index)
+
+    def sort_bubble(self):
+        return super().sort_bubble(sorted=True)
