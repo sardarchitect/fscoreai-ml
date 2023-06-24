@@ -1,17 +1,26 @@
-from primitives import dynamic_array
+import os
+import sys
+PROJECT_PATH = os.getcwd()
+sys.path.append(PROJECT_PATH)
 
-arr = dynamic_array.DynamicArray()
+from src.primitives.set import Set
 
-# Append
-arr.append(1)
-arr.append(2)
-arr.append(3)
-arr.print()
+x = Set()
+x.append(5)
+x.display_array()
+x.append(10)
+x.display_array()
+x.pop()
+x.display_array()
+x.insert(0,2)
+x.insert(0,10)
+x.insert(0,6)
+x.insert(0,8)
+x.display_array()
 
-arr.pop()
-arr.print()
-
-arr.insert(0, 1)
-arr.insert(0, 2)
-arr.insert(0, 3)
-arr.print()
+x.delete(0)
+x.delete(0)
+x.delete(0)
+x.delete(0)
+x.delete(0)
+x.display_array()
