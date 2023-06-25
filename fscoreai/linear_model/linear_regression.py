@@ -1,3 +1,4 @@
+from tqdm import tqdm
 import numpy as np
 
 class LinearRegression():
@@ -17,13 +18,11 @@ class LinearRegression():
     intercept : int
         returns the y-intercept
     """
-
     def __init__(self):
-        self.coef_ = 0
-        self.intercept_ = 0
-        print("Linear Regression Model Initialized")
+        self.coef_ = None
+        self.intercept_ = None
 
-    def fit(self, X, y, fit_type = 'stat', lr=1e-8, epochs=50):
+    def fit(self, X, y, lr=1e-3, epochs=50):
         """"
         Parameters
         ----------
@@ -42,35 +41,33 @@ class LinearRegression():
         ------
         null
         """
-    
-        if (fit_type == 'stat'):    #Evaluate closed-form solution
-            if (X.shape[1] < 1):    #If X is one-dimensional
-                X_mean = np.mean(X, axis=0)
-                y_mean = np.mean(y)
-                self.coef_ = np.sum((X - X_mean).T*(y-y_mean), axis=1)\
-                    /(np.sum((X - X_mean)**2, axis=0)) 
-                self.intercept_ = y_mean - (self.coef_ * X_mean)
-                return self
-            else:   # If X is multi-dimensional
-                X = np.hstack((np.ones((X.shape[0],1)), X))
-                beta = np.linalg.inv(np.dot(X.T, X)).dot(np.dot(X.T,y))
-                self.intercept_ = beta[0]
-                self.coef_ = beta[1:]
-                return self
+        n, d = X.shape
+        self.coef_ = np.random.randn(d, 1)
+        self.intercept_ = np.random.randn(1)
+        
+        for _ in tqdm(range(epochs)):
+            y_pred = self.predict(X)
+            d_coef = -(2 / n) * np.sum((y - y_pred) * (X), axis=0).reshape(-1, 1) #Derivative w.r.t. self.coef_
+            d_intercept = -(2 / n) * np.sum(y - y_pred) #Derivative w.r.t. self.intercept_
+            self.coef_ -=  lr * d_coef          #    Update self.coef_ 
+            self.intercept_ -=  lr * d_intercept  #    Update self.intercept_
+        return
 
-        if (fit_type == 'grad'): # Evaluate gradient descent solution:
-            self.lr = lr  #   Learning rate
-            self.epochs = epochs
-            self.n, self.d = X.shape
-
-            for epoch in range(self.epochs):
-                for j in range(self.d):
-                    y_pred = self.predict(X)
-                    d_coef = - (1 / self.n) * np.sum((y - y_pred).dot(X[:,j])) #Derivative w.r.t. self.coef_
-                    d_intercept = - (1 / self.n) * np.sum(y - y_pred) #Derivative w.r.t. self.intercept_
-                    self.coef_ -=  self.lr * d_coef          #    Update self.coef_ 
-                    self.intercept_ -=  self.lr * d_intercept  #    Update self.intercept_
-            return self
+    def fit_statistical(self, X, y):
+        # if (X.shape[1] < 1):    #If X is one-dimensional
+        #     X_mean = np.mean(X, axis=0)
+        #     y_mean = np.mean(y)
+        #     self.coef_ = np.sum((X - X_mean).T*(y-y_mean), axis=1)\
+        #         /(np.sum((X - X_mean)**2, axis=0)) 
+        #     self.intercept_ = y_mean - (self.coef_ * X_mean)
+        #     return self
+        # else:   # If X is multi-dimensional
+        n, d = X.shape
+        X = np.hstack((np.ones((n, 1)), X))
+        beta = np.linalg.inv(X.T@X) @ (X.T@y)
+        self.intercept_ = beta[0]
+        self.coef_ = beta[1:].reshape(-1, 1)
+        return
 
     def predict(self, X):
         """"
