@@ -1,11 +1,10 @@
 import os
 import sys
-import pytest
 PROJECT_PATH = os.getcwd()
 sys.path.append(PROJECT_PATH)
 from src.primitives.array import DynamicArray
+import pytest
 
-@pytest.fixture
 def array():
     return DynamicArray()
 
