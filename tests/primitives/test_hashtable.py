@@ -4,7 +4,7 @@ import pytest
 from pytest_unordered import unordered
 PROJECT_PATH = os.getcwd()
 sys.path.append(PROJECT_PATH)
-from src.primitives.hash_table import HashTable
+from fscoreai.primitives.hash_table import HashTable
 
 """
 Tutorial by https://realpython.com/python-hash-table
