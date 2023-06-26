@@ -2,9 +2,10 @@ import numpy as np
 from random import seed
 from random import randrange
 
-def normalize(a):
-    norm = [((i)-min(a))/(max(a)-min(a)) for i in a]
-    return norm
+def normalize(arr):
+    norm = np.linalg.norm(arr, axis=1, keepdims=True)
+    normalized_arr = arr/norm
+    return normalized_arr
 
 def sigmoid(x):
     return 1/(1+np.exp(-1*x))
