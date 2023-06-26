@@ -29,6 +29,10 @@ def test_should_check_sample_data_shape(sample_data):
     assert a.shape == (2, 15)
     assert b.shape == (2, 15)
 
+def test_should_verify_mean_absolute_error_output(sample_data):
+    a, b = sample_data[0], sample_data[1]
+    assert isclose(mean_absolute_error(a, b), 0.8428982796666666, abs_tol=1e-5)
+
 def test_should_verify_squared_error_output(sample_data):
     a, b = sample_data[0], sample_data[1]
     assert isclose(squared_error(a, b), 32.90479609110383, abs_tol=1e-8)
@@ -37,20 +41,14 @@ def test_should_verify_mean_squared_error_output(sample_data):
     a, b = sample_data[0], sample_data[1]
     assert isclose(mean_squared_error(a, b), 1.0968265363701275, abs_tol=1e-8)
 
-def test_should_verify_mean_absolute_error_output(sample_data):
-    a, b = sample_data[0], sample_data[1]
-    assert isclose(mean_absolute_error(a, b), 0.8428982796666666, abs_tol=1e-5)
-
-"""
 def test_should_verify_root_mean_squared_error_output(sample_data):
     a, b = sample_data[0], sample_data[1]
-    assert isclose(root_mean_squared_error(a, b), 1.0968265363701275, abs_tol=1e-8)
+    assert isclose(root_mean_squared_error(a, b), 1.0472948660096293, abs_tol=1e-8)
 
 def test_should_verify_root_mean_squared_log_error_output(sample_data):
-    a, b = sample_data[0], sample_data[1]
-    assert isclose(root_mean_squared_log_error(a, b), 1.0968265363701275, abs_tol=1e-8)
+    a, b = np.abs(sample_data[0]), np.abs(sample_data[1])
+    assert isclose(root_mean_squared_log_error(a, b), 0.10948313065081614, abs_tol=1e-8)
 
 def test_should_verify_r_squared_output(sample_data):
-    a, b = sample_data[0], sample_data[1]
-    assert isclose(r_squared(a, b), 1.0968265363701275, abs_tol=1e-8)
-"""
+    a, b = sample_data[0].reshape(-1), sample_data[1].reshape(-1)
+    assert isclose(r_squared(a, b), 0.7808862363889533, abs_tol=1e-8)
