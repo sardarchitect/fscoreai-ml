@@ -46,16 +46,22 @@ def salary_data():
     return X, y
 
 def diabetes_data():
-    path_X = os.path.join(dir_path, 'diabetes_data.csv')
-    path_y = os.path.join(dir_path, 'diabetes_target.csv')
-    X = pd.read_csv(path_X, delim_whitespace=True).to_numpy()
-    y = pd.read_csv(path_y, header=None).to_numpy()
-    return X, y
+    path = os.path.join(dir_path, 'diabetes_data.csv')
+    X = pd.read_csv(path, header=0)
+    y = X['Outcome']
+    X = X.drop(columns=['Outcome'])
+    return X.to_numpy(), y.to_numpy()
+
+def diabetes_classification():
+    path = os.path.join(dir_path, 'diabetes_prediction_dataset.csv')
+    X = pd.read_csv(path, header=0)
+    y = X['diabetes']
+    X = X[['age', 'bmi', 'HbA1c_level',  'blood_glucose_level']]
+    return X.to_numpy(), y.to_numpy()
 
 def iris_data():
-    path = '../datasets/'
-    path = path + 'IRIS.csv'
+    path = os.path.join(dir_path, 'IRIS.csv')
     df = pd.read_csv(path)
     X = df.drop(columns='species').to_numpy()
-    y = df['species'].to_numpy()
+    y = df['species'].to_numpy().reshape(-1, 1)
     return X, y

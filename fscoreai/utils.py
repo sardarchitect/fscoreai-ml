@@ -8,6 +8,10 @@ def normalize(arr):
     return normalized_arr
 
 def sigmoid(x):
+    # if x >= 0:
+    #     return 1/(1+np.exp(-1*x))
+    # else:
+    #     return np.exp(x)/(1 + np.exp(x))
     return 1/(1+np.exp(-1*x))
 
 def gaussian(x, mu, sigma):

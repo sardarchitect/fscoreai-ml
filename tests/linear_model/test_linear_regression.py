@@ -4,7 +4,7 @@ import pytest
 
 PROJECT_PATH = os.getcwd()
 sys.path.append(PROJECT_PATH)
-from fscoreai.linear_model.linear_regression import LinearRegression
+from fscoreai.linear import LinearRegression
 from sample_data.sample_data import simulate_linear_data, simulate_multilinear_data
 
 @pytest.fixture

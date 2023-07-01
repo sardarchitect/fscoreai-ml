@@ -1,5 +1,7 @@
 from tqdm import tqdm
 import numpy as np
+from fscoreai.utils import sigmoid
+from sklearn.preprocessing import normalize
 
 class LinearRegression():
     """Linear Regression through Ordinary Least Squares (OLS).
@@ -82,3 +84,34 @@ class LinearRegression():
             N dimensional list of model predictions
         """
         return np.dot(X, self.coef_) + self.intercept_
+
+class LogisticRegression():
+    def __init__(self):
+        self.weights = None
+        self.intercept_ = None
+        self.coef_ = None
+    
+    def fit(self, X, y, lr=0.01, epochs=2):        
+        n, d = X.shape
+        X = normalize(X, norm='l2', axis=1)
+        print(X.shape)
+        X = np.hstack((np.ones(shape=(n, 1)), X))
+        self.weights = np.random.randn(d+1)
+                       
+        for epoch in tqdm(range(epochs)):
+            y_pred = sigmoid(np.dot(X, self.weights))
+            dw = (1/n) * X.T.dot(y - y_pred)
+            self.weights -= lr * dw
+        
+        self.intercept_ = self.weights[:1]
+        self.coef_ = self.weights[1:]
+    
+    def predict(self, X):
+        X = np.hstack((np.ones(shape=(X.shape[0], 1)), X))
+        y_pred = sigmoid(np.dot(X, self.weights.T))
+        return np.where(y_pred > 0.5, 1, 0)
+    
+    def score(self, X, y):
+        y_pred = self.predict(X)
+        accuracy = np.mean(y_pred == y)
+        return accuracy
