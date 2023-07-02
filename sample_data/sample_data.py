@@ -34,7 +34,7 @@ def heart_data():
 def kc_house_data():
     path = os.path.join(dir_path, 'kc_house_data.csv')
     df = pd.read_csv(path)
-    X = df[["sqft_living","yr_built"]].to_numpy()
+    X = df[["bedrooms", "bathrooms", "sqft_living", "waterfront", "yr_built", "yr_renovated"]].to_numpy()
     y = df["price"].to_numpy().reshape(-1, 1)
     return X, y
 

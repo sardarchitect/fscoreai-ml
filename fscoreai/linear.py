@@ -3,88 +3,54 @@ import numpy as np
 from fscoreai.utils import sigmoid
 from sklearn.preprocessing import normalize
 
-class LinearRegression():
-    """Linear Regression through Ordinary Least Squares (OLS).
-    Linear Regression fits a linear hyperplane with coefficients
-    (coef_) and an intercept (intercept_). It minimizes the cost by minimizing
-    the sum of the residuals between observed inputs and the predicted outputs.
-
-    Parameters
-    ----------
-    None
-
-    Attributes
-    ----------    
-    coef_ : int
-        returns the coefficient
-    intercept : int
-        returns the y-intercept
-    """
+class GeneralizedLinearModel():
     def __init__(self):
+        self.weights_ = None
         self.coef_ = None
         self.intercept_ = None
-
-    def fit(self, X, y, lr=1e-3, epochs=50):
-        """"
-        Parameters
-        ----------
-        X : numpy array
-            N x D dimensional input matrix
-        y : numpy array
-            N dimensional output/labels matrix
-        fit_type : str
-            'stat' uses statistical, closed-form solution
-            'grad' uses gradient descent to optimize parameters for OLS
-        lr : float
-            sets learning rate when using fit_type == 'grad'
-        epochs : int
-            sets number of epochs when using fit_type=='grad'
-        Returns
-        ------
-        null
-        """
-        n, d = X.shape
-        self.coef_ = np.random.randn(d, 1)
-        self.intercept_ = np.random.randn(1)
+        self.costs = []
         
-        for _ in tqdm(range(epochs)):
-            y_pred = self.predict(X)
-            d_coef = -(2 / n) * np.sum((y - y_pred) * (X), axis=0).reshape(-1, 1) #Derivative w.r.t. self.coef_
-            d_intercept = -(2 / n) * np.sum(y - y_pred) #Derivative w.r.t. self.intercept_
-            self.coef_ -=  lr * d_coef          #    Update self.coef_ 
-            self.intercept_ -=  lr * d_intercept  #    Update self.intercept_
+    def initialize_weights(self, n_features):
+        self.weights_ = np.random.randn(n_features + 1, 1)
+        
+class LinearRegression(GeneralizedLinearModel):
+    def __init__(self):
+        super().__init__()
+        
+    def optimize(self, n_epochs, learning_rate, X, y, tolerance=1e-04):
+        for _ in tqdm(range(n_epochs)):
+            y_pred = np.dot(X, self.weights_)
+            error = y - y_pred
+            cost = (1 / self.n_features) * np.dot(error.T, error).reshape(-1)
+            self.costs.append(cost)
+            dLdw = - 2 * np.dot(X.T, error)
+            if np.all(np.abs(dLdw) <= tolerance):
+                return
+            self.weights_ = self.weights_ - (learning_rate * dLdw)
+        
+    def fit(self, X, y, learning_rate=1e-5, n_epochs=50):
+        y = y.reshape(-1, 1)
+        self.n_samples, self.n_features = X.shape
+        X = np.hstack((np.ones((self.n_samples, 1)), X))
+        self.initialize_weights(self.n_features)
+        self.optimize(n_epochs, learning_rate, X, y)
+        self.intercept_ = self.weights_[0]
+        self.coef_ = self.weights_[1:]
         return
 
-    def fit_statistical(self, X, y):
-        # if (X.shape[1] < 1):    #If X is one-dimensional
-        #     X_mean = np.mean(X, axis=0)
-        #     y_mean = np.mean(y)
-        #     self.coef_ = np.sum((X - X_mean).T*(y-y_mean), axis=1)\
-        #         /(np.sum((X - X_mean)**2, axis=0)) 
-        #     self.intercept_ = y_mean - (self.coef_ * X_mean)
-        #     return self
-        # else:   # If X is multi-dimensional
+    def fit_closed_form(self, X, y):
         n, d = X.shape
         X = np.hstack((np.ones((n, 1)), X))
-        beta = np.linalg.inv(X.T@X) @ (X.T@y)
-        self.intercept_ = beta[0]
-        self.coef_ = beta[1:].reshape(-1, 1)
+        self.weights_ = np.linalg.inv(X.T@X) @ (X.T@y)
+        
+        self.intercept_ = self.weights_[0]
+        self.coef_ = self.weights_[1:]
         return
 
     def predict(self, X):
-        """"
-        Parameters
-        ----------
-        X : numpy array
-            N x D dimensional input matrix
-
-        Returns
-        ------
-        list
-            N dimensional list of model predictions
-        """
-        return np.dot(X, self.coef_) + self.intercept_
-
+        X = np.hstack((np.ones((X.shape[0], 1)), X))
+        return np.dot(X, self.weights_)
+    
 class LogisticRegression():
     def __init__(self):
         self.weights = None
