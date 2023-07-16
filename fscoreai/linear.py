@@ -4,6 +4,9 @@ from fscoreai.utils import sigmoid
 from sklearn.preprocessing import normalize
 
 class GeneralizedLinearModel():
+    """Generalized Linear Model Base Class
+
+    """
     def __init__(self):
         self.weights_ = None
         self.coef_ = None
@@ -14,26 +17,31 @@ class GeneralizedLinearModel():
         self.weights_ = np.random.randn(n_features + 1, 1)
         
 class LinearRegression(GeneralizedLinearModel):
+    """Linear Regression Class
+    Uses GeneralizedLinearModel to initialize weights and variables
+    """
     def __init__(self):
         super().__init__()
         
-    def optimize(self, n_epochs, learning_rate, X, y, tolerance=1e-04):
-        for _ in tqdm(range(n_epochs)):
-            y_pred = np.dot(X, self.weights_)
-            error = y - y_pred
-            cost = (1 / self.n_features) * np.dot(error.T, error).reshape(-1)
-            self.costs.append(cost)
-            dLdw = - 2 * np.dot(X.T, error)
-            if np.all(np.abs(dLdw) <= tolerance):
-                return
-            self.weights_ = self.weights_ - (learning_rate * dLdw)
+    def optimize(self, learning_rate, X, y, tolerance=1e-04):
+        y_pred = np.dot(X, self.weights_)
+        error = y - y_pred
+        cost = (1 / self.n_samples) * np.dot(error.T, error).reshape(-1)
+        self.costs.append(cost)
+        
+        dLdw = - 2 * np.dot(X.T, error) / self.n_samples
+        if np.all(np.abs(dLdw) <= tolerance):
+            return
+        self.weights_ = self.weights_ - (learning_rate * dLdw)
         
     def fit(self, X, y, learning_rate=1e-5, n_epochs=50):
         y = y.reshape(-1, 1)
         self.n_samples, self.n_features = X.shape
         X = np.hstack((np.ones((self.n_samples, 1)), X))
         self.initialize_weights(self.n_features)
-        self.optimize(n_epochs, learning_rate, X, y)
+        for _ in tqdm(range(n_epochs)):
+            self.optimize(learning_rate, X, y)
+
         self.intercept_ = self.weights_[0]
         self.coef_ = self.weights_[1:]
         return

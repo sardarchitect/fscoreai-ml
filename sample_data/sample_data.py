@@ -38,6 +38,13 @@ def kc_house_data():
     y = df["price"].to_numpy().reshape(-1, 1)
     return X, y
 
+def boston_house_data():
+    path = os.path.join(dir_path, 'boston_housing.csv')
+    df = pd.read_csv(path)
+    X = df.drop(columns=['sno','medv']).to_numpy()
+    y = df["medv"].to_numpy().reshape(-1, 1)
+    return X, y
+
 def salary_data():
     path = os.path.join(dir_path, 'salary_data.csv')
     df = pd.read_csv(path)
