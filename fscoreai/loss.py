@@ -36,7 +36,6 @@ def r_squared(true, predicted):
     n = true.shape[0]
     true_mean = np.sum(true, axis=0)/n
     
-    print(true.shape, true_mean.shape, predicted.shape)
     SSR = np.sum((true - predicted)**2)
     SSM = np.sum((true - true_mean)**2)    
     
