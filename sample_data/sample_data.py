@@ -69,6 +69,4 @@ def diabetes_classification():
 def iris_data():
     path = os.path.join(dir_path, 'IRIS.csv')
     df = pd.read_csv(path)
-    X = df.drop(columns='species').to_numpy()
-    y = df['species'].to_numpy().reshape(-1, 1)
-    return X, y
+    return df
