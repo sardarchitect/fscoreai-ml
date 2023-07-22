@@ -11,15 +11,25 @@ class Layer_Dense:
         self.bias = np.zeros((1, self.n_neurons))
     
     def forward(self, inputs):
-        self.output = np.dot(inputs, self.weights) + self.bias
+        self.inputs = inputs
+        self.output = np.dot(self.inputs, self.weights) + self.bias
 
+    def backward(self, dvalues):
+        self.dweights = np.dot(self.inputs.T, dvalues)
+        self.bias = np.sum(dvalues, axis=0, keepdims=True)
+        self.dinputs = np.dot(dvalues, self.weights.T)
 
 class Activation_ReLU:
     def __init__(self):
         pass
 
     def forward(self, inputs):
-        self.output = np.maximum(0, inputs)
+        self.inputs = inputs
+        self.output = np.maximum(0, self.inputs)
+
+    def backward(self, dvalues):
+        self.dinputs = dvalues.copy()
+        self.inputs[self.inputs <= 0] = 0
 
 class Activation_Softmax:
     def __init__(self):
