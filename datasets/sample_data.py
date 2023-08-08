@@ -10,6 +10,7 @@ def simulate_linear_data(start=-1, stop=1, n=100, beta_0=1.0, beta_1=2.0, eps_me
     return X, y
 
 def simulate_multilinear_data(n=100, d=3, seed=42):
+    np.random.seed(seed)
     X = np.random.randn(n, d)
     true_coef = np.random.randn(1, d)
     true_intercept = np.random.randn(1)
