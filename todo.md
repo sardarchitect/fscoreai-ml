@@ -3,13 +3,13 @@
 # Linear Regression and GLM
 -[ ] Simple linear regression
     -[ ] Closed-form solution
-    -[ ] Gradient descent solution
 -[ ] Multi-linear regression
+    -[ ] Closed-form solution
+    -[ ] Gradient descent solution
+    -[ ] Bayesian solution
+    -[ ] Maximum likelihood estimation solution
 -[ ] Logistic regression
 -[ ] Regularization techniques
--[ ] Generalized Linear Model
-    -[ ] MLE
-    -[ ] Bayesian
 
 # Neural Networks
 -[ ] Feedforward
